@@ -1,0 +1,12 @@
+{
+  "name": "pool-workout-upload",
+  "version": "1.0.0",
+  "description": "A full stack application allowing users to upload their swim workouts for others to see",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
