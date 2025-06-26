@@ -24,9 +24,11 @@ model Workout {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  password String
-  workouts Workout[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String    @unique
+  password    String
+  affiliation String
+  createdAt   DateTime  @default(now())
+  Workout     Workout[]
 }
-
