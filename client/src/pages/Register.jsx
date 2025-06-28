@@ -8,7 +8,7 @@ export default function Register() {
             </div>
 
             <div className = "overflow-hidden h-auto flex items-center justify-center" id = "formDiv">
-                <form className = "" id = "register">
+                <form method = "POST" action = "/register" className = "" id = "register">
                     <div className = "p-1 grid grid-cols-2">    
                         <label className = "block pr-3" for = "username">Username: </label>
                         <input className = "border bg-blue-200 border-solid border-blue-400" id = "username" type = "text" required/>

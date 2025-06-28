@@ -13,7 +13,7 @@ export default function App() {
       <div className = "p-4">
         <Routes>
           <Route path = "/" element = {<Home />}/>
-          <Route path = "/Search" element = {<Search />}/>
+          <Route path = "/Search" element = {<Search />}/>  
           <Route path = "/CreateWorkout" element = {<CreateWorkout />}/>
           <Route path = "/Register" element = {<Register />}/>
         </Routes>
