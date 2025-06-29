@@ -25,8 +25,8 @@ model Workout {
 
 model User {
   id          Int       @id @default(autoincrement())
+  username    String    @unique
   name        String
-  email       String    @unique
   password    String
   affiliation String
   createdAt   DateTime  @default(now())

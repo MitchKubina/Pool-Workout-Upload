@@ -20,7 +20,7 @@ app.post('/register', async (req, res) => {
 
   try {
     const user = await prisma.user.create({
-      data: { name, username , password, affiliation },
+      data: { name, username , password, affiliation, email: "test"},
     });
     res.status(201).json(user);
     console.log("User added succesfully");
