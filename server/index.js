@@ -20,10 +20,10 @@ app.post('/register', async (req, res) => {
 
   try {
     const user = await prisma.user.create({
-      data: { name, username , password, affiliation, email: "test"},
+      data: { username, name, password, affiliation},
     });
     res.status(201).json(user);
-    console.log("User added succesfully");
+    console.log(`${username} added succesfully`);
   } catch (err) {
     if (err.code === 'P2002') {
       res.status(409).json({ error: 'Email already exists' });
