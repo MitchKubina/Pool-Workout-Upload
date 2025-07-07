@@ -20,7 +20,7 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/register', formData); // 👈 goes to backend
+            const response = await axios.post('/register', formData);
             console.log('User registered:', response.data);
             setFormData({ name: '', username: '', password: '', password_confirm: '', affiliation: ''});
         } catch (err) {
