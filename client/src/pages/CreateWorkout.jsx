@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 export default function AddWorkout() {
   // State to track all sets (each set has title and details)
+  const [workoutTitle, setWorkoutTitle] = useState('');
   const [sets, setSets] = useState([{ title: '', details: '' }]);
 
   // Add a new empty set
@@ -35,9 +36,12 @@ export default function AddWorkout() {
       <h1 className="text-2xl font-bold mb-6">Create Swim Workout</h1>
       
       <form onSubmit={handleSubmit}>
+        <div className = "mb-6 p-4 bg-blue-200 rounded-sm"> 
+          <input type = "text" value = {workoutTitle} onChange = {e => setWorkoutTitle(e.target.value)} placeholder = "Workout Title" className = "p-2 w-full border rounded"></input>
+        </div>
         {/* Dynamically generated set inputs */}
         {sets.map((set, index) => (
-          <div key={index} className="mb-6 p-4 bg-gray-50 rounded-lg">
+          <div key={index} className="mb-6 p-4 bg-blue-200 rounded-sm">
             <div className="flex justify-between items-center mb-2">
               <label className="block font-medium">Set {index + 1}</label>
               {sets.length > 1 && (
