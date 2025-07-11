@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import axios from 'axios'
 
 export default function AddWorkout() {
   // State to track all sets (each set has title and details)
   const [workoutTitle, setWorkoutTitle] = useState('');
   const [sets, setSets] = useState([{ title: '', details: '' }]);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
+
 
   // Add a new empty set
   const addSet = () => {
@@ -28,13 +32,42 @@ export default function AddWorkout() {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Workout:', workoutTitle);
     console.log('Final sets:', sets); // Replace with your API call
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      if (!workoutTitle.trim()) {
+        throw new Error('Workout title is required');
+      }
+
+      const response = axios.post("/createWorkout", {
+        title: workoutTitle, 
+        sets: sets.filter(set => set.title.trim() && set.details.trim())
+      });
+      setWorkoutTitle('');
+      setSets([{ title: '', details: '' }]); // Reset to one empty set
+      
+      // Optional: Redirect or show success message
+      alert('Workout saved successfully!');
+    } catch (err) {
+      console.log("Failed to save workout:", err);
+    } finally {
+      setIsSubmitting(false)
+    }
   };
 
   return (
     <div className="p-4 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Create Swim Workout</h1>
       
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit}>
         <div className = "mb-6 p-4 bg-blue-200 rounded-sm"> 
           <input type = "text" value = {workoutTitle} onChange = {e => setWorkoutTitle(e.target.value)} placeholder = "Workout Title" className = "p-2 w-full border rounded"></input>
@@ -80,16 +113,19 @@ export default function AddWorkout() {
           <button
             type="button"
             onClick={addSet}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-400 text-white px-4 py-2 rounded"
           >
             + Add Another Set
           </button>
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded"
-          >
-            Save Workout
-          </button>
+           <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`bg-blue-500 text-white px-4 py-2 rounded ${
+                isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+              }`}
+            >
+              {isSubmitting ? 'Saving...' : 'Save Workout'}
+            </button>
         </div>
       </form>
     </div>

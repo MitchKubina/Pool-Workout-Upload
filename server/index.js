@@ -34,5 +34,26 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.post('/createWorkout', async (req,res) => {
+  console.log("Create workout route triggered");
+
+  const {title, sets} = req.body;
+  console.log(title);
+  console.log(sets);
+
+  const fakeUserID = "mitch";
+
+  try {
+    console.log(JSON.stringify(sets));
+    const str = JSON.stringify(sets);
+
+    const workout = await prisma.workout.create({
+      data: {title: title, content: str, userId: 1},
+    });
+  } catch (err) {
+    console.log("something went wrong", err);
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
