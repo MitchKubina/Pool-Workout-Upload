@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Search from './pages/Search'
 import CreateWorkout from './pages/CreateWorkout'
 import Register from './pages/Register'
+import Login from './pages/Login'
 
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
           <Route path = "/Search" element = {<Search />}/>  
           <Route path = "/CreateWorkout" element = {<CreateWorkout />}/>
           <Route path = "/Register" element = {<Register />}/>
+          <Route path = "/Login" element = {<Login />}/>
         </Routes>
       </div>
     </div>

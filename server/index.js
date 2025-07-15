@@ -2,13 +2,17 @@ const express = require('express');
 const { PrismaClient } = require('./generated/prisma/client');
 const cors = require('cors');
 
+import bcrypt from 'bcrypt';
+import jwt from 'jasonwebtoken';
+
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json()); // for parsing application/json
 
-// ✅ /register route
+
+
 app.post('/register', async (req, res) => {
   console.log("register route triggered");
   
