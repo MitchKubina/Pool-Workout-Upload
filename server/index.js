@@ -1,14 +1,20 @@
 const express = require('express');
 //const { PrismaClient } = require('./generated/prisma/client');
 const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
 const cors = require('cors');
-
+require("dotenv").config();
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 
 const app = express();
+app.use(cors());
+app.use(express.json()); // for parsing application/json
 //const prisma = new PrismaClient();
+
+console.log('DB_PASSWORD:', process.env.DB_PASS, 'Type:', typeof process.env.DB_PASSWORD);
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -18,10 +24,16 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-
-
-app.use(cors());
-app.use(express.json()); // for parsing application/json
+//initialize database
+async function initializeDatabase() {
+  try {
+    const sql = fs.readFileSync(path.join(__dirname, 'db/schema.sql')).toString();
+    await pool.query(sql);
+    console.log('Database schema initialized');
+  } catch (err) {
+    console.error('Error initializing database:', err);
+  }
+}
 
 app.post('/register', async (req, res) => {
   console.log("register route triggered");
@@ -78,7 +90,7 @@ app.post('/createWorkout', async (req,res) => {
     */
 
     const work = await pool.query(
-      'INSERT into WORKOUTS (title, content, userID) VALUES ($1, $2, $3) RETURNING *', [title, str, 1]
+      'INSERT into WORKOUTS (title, content, user_id) VALUES ($1, $2, $3) RETURNING *', [title, str, 1]
     );
 
     res.status(200);
@@ -87,14 +99,8 @@ app.post('/createWorkout', async (req,res) => {
   }
 });
 
-app.get('/test-db', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT NOW() as current_time');
-    res.json({ success: true, time: result.rows[0].current_time });
-  } catch (err) {
-    res.status(500).json({ error: 'Connection failed', details: err.message });
-  }
-});
-
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Call this when your server starts
+initializeDatabase();
+//console.log("hi");
