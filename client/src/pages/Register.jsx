@@ -20,7 +20,15 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/register', formData);
+            const response = await axios.post('/register', formData)
+                .then(response => {
+                    if (response.data.redirect) {
+                    window.location.href = response.data.redirect;
+                    }
+                })
+                .catch(error => {
+                    console.error('Registration error:', error);
+         });
             console.log('User registered:', response.data);
             setFormData({ name: '', username: '', password: '', password_confirm: '', affiliation: ''});
         } catch (err) {

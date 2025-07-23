@@ -24,6 +24,10 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
+const user = {
+  username: "",
+  userid: '',
+};
 //initialize database
 async function initializeDatabase() {
   try {
@@ -35,6 +39,14 @@ async function initializeDatabase() {
   }
 }
 
+app.post('/login', async (req, res) => {
+  const {username, password} = req.body;
+
+  const attempt = await pool.query("Select password From users where username = $1", [username]);
+
+  console.log(attempt);
+});
+
 app.post('/register', async (req, res) => {
   console.log("register route triggered");
   
@@ -44,21 +56,24 @@ app.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  try {
-    /*
-    const user = await prisma.user.create({
-      data: { username, name, password, affiliation},
-    });
-    */
-    const hashedPassword = bcrypt.hash(password, 10);
+  if (password !== password_confirm) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
 
+  try {
+    const hashedPassword = bcrypt.hash(password, 10);
     const result = await pool.query(
       'INSERT INTO users (username, name, password, affiliation) VALUES ($1, $2, $3, $4) RETURNING *',
       [username, name, hashedPassword, affiliation]
     );
 
+    //res.status(201).json(user);
+    res.status(201).json({ 
+      message: 'Registration successful', 
+      redirect: '/Login',
+      user: result.rows[0] 
+    });
 
-    res.status(201).json(user);
     console.log(`${username} added succesfully`);
   } catch (err) {
     if (err.code === 'P2002') {
