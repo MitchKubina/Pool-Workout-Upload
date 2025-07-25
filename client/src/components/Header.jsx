@@ -1,5 +1,23 @@
 export default function Header() {
-  return (
+    // Example frontend logout handler
+    function logout() {
+    // Call the logout endpoint
+        fetch('/Logout', {
+            method: 'POST',
+            credentials: 'include' // Needed if using HTTP-only cookies
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+            // Remove token from client storage
+            localStorage.removeItem('token');
+            // Redirect to login page
+            window.location.href = '/login';
+            }
+        });
+    }
+  
+    return (
     <nav class="border-blue-300 bg-blue-200">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div class="hidden w-full md:block md:w-auto" id="navbar-default">
@@ -18,6 +36,7 @@ export default function Header() {
             <a href="/Register" className = "right-full w-10 aspect-square">
                 <img src="/swimmer.png" className = "size-fit" alt = "swimmer"/>
             </a>
+            <button onClick = {logout}>logout</button>
         </div>
     </nav>
   );

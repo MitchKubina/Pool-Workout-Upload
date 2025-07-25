@@ -17,7 +17,15 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/login', formData);
+            const response = await axios.post('/login', formData)
+            .then(response => {
+                    if (response.data.redirect) {
+                    window.location.href = response.data.redirect;
+                    }
+                })
+            .catch(err => {
+                console.log(err);
+            });
             console.log('User logged in:', response.data);
             setFormData({ username: '', password: ''});
         } catch (err) {

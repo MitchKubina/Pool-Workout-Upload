@@ -39,12 +39,47 @@ async function initializeDatabase() {
   }
 }
 
+app.post('/Logout', async (req, res) => {
+  res.status(200).json({ 
+    success: true,
+    message: 'Logout successful',
+    // Instruct client to remove token
+    action: 'clear_token' 
+  });
+})
+
 app.post('/login', async (req, res) => {
   const {username, password} = req.body;
 
-  const attempt = await pool.query("Select password From users where username = $1", [username]);
+  const attempt = await pool.query("Select * From users where username = $1", [username]);
 
-  console.log(attempt);
+  if (attempt.rows.length == 0) {
+    console.log("No users found");
+    return res.status(401).json({error: "User not found"});
+  }
+
+  let userInfo = attempt.rows[0];
+  const passwordMatch = bcrypt.compare(password, userInfo.password)
+
+  if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const token = jwt.sign(
+      { userId: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+  
+  res.json({ 
+      message: 'Login successful',
+      token,
+      user: { id: user.id, username: user.username, name: user.name },
+      redirect: "/"
+    });
+
+  console.log(attempt.rows[0]);
+  return attempt;
 });
 
 app.post('/register', async (req, res) => {
@@ -61,7 +96,7 @@ app.post('/register', async (req, res) => {
   }
 
   try {
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
       'INSERT INTO users (username, name, password, affiliation) VALUES ($1, $2, $3, $4) RETURNING *',
       [username, name, hashedPassword, affiliation]

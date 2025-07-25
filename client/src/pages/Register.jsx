@@ -28,7 +28,7 @@ export default function Register() {
                 })
                 .catch(error => {
                     console.error('Registration error:', error);
-         });
+                });
             console.log('User registered:', response.data);
             setFormData({ name: '', username: '', password: '', password_confirm: '', affiliation: ''});
         } catch (err) {
