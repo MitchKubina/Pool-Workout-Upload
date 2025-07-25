@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json()); // for parsing application/json
 //const prisma = new PrismaClient();
 
-console.log('DB_PASSWORD:', process.env.DB_PASS, 'Type:', typeof process.env.DB_PASSWORD);
+//console.log('DB_PASSWORD:', process.env.DB_PASS, 'Type:', typeof process.env.DB_PASSWORD);
 
 const pool = new Pool({
   user: process.env.DB_USER,
@@ -175,6 +175,34 @@ app.get('/api/workouts/recent', async (req, res) => {
   } catch (err) {
     console.error('Error fetching workouts:', err);
     res.status(500).json({ error: 'Failed to fetch workouts' });
+  }
+});
+
+app.get('/api/workouts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(`
+      SELECT 
+        workouts.*,
+        users.username as author
+      FROM workouts
+      JOIN users ON workouts.user_id = users.id
+      WHERE workouts.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Workout not found' });
+    }
+
+    const workout = {
+      ...result.rows[0],
+      content: JSON.parse(result.rows[0].content)
+    };
+
+    res.json(workout);
+  } catch (err) {
+    console.error('Error fetching workout:', err);
+    res.status(500).json({ error: 'Failed to fetch workout' });
   }
 });
 

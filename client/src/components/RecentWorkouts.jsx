@@ -1,5 +1,6 @@
 // src/components/RecentWorkouts.js
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const RecentWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
@@ -34,12 +35,12 @@ const RecentWorkouts = () => {
       {workouts.length > 0 ? (
         <div className="workouts-list">
           {workouts.map((workout) => (
-            <a className = "" href = "/view_workout">
-            <div key={workout.id} className="workout-card border mt-3 p-2">
-              <h3>{workout.title}</h3>
-              <p className="meta">By {workout.author} • {workout.created_at}</p>
-            </div>
-            </a>
+            <Link to={`/view-workout/${workout.id}`} key={workout.id} className="workout-link">
+              <div className="workout-card border mt-3 p-2">
+                <h3>{workout.title}</h3>
+                <p className="meta">By {workout.author} • {workout.created_at}</p>
+              </div>
+            </Link>
           ))}
         </div>
       ) : (

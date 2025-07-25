@@ -5,6 +5,7 @@ import Search from './pages/Search'
 import CreateWorkout from './pages/CreateWorkout'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import ViewWorkout from './pages/ViewWorkout'
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
           <Route path = "/CreateWorkout" element = {<CreateWorkout />}/>
           <Route path = "/Register" element = {<Register />}/>
           <Route path = "/Login" element = {<Login />}/>
+          <Route path="/view-workout/:id" element={<ViewWorkout />} />
         </Routes>
       </div>
     </div>
