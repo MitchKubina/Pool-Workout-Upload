@@ -12,7 +12,7 @@ export default function Header() {
             // Remove token from client storage
             localStorage.removeItem('token');
             // Redirect to login page
-            window.location.href = '/login';
+            window.location.href = '/';
             }
         });
     }

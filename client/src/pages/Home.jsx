@@ -1,3 +1,12 @@
+import RecentWorkouts from '../components/RecentWorkouts';
+
 export default function Home() {
-    return <h1 className = "text-3x1 text-center text-red-500">Home Page</h1>
+    return (
+    <div class = "Home Page">
+        <main>
+            <h2 className = "text-6xl text-center">Lap-Swim</h2>
+            <RecentWorkouts />
+        </main>
+    </div>
+    );
 }

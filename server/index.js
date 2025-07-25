@@ -149,6 +149,35 @@ app.post('/createWorkout', async (req,res) => {
   }
 });
 
+app.get('/api/workouts/recent', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        workouts.id, 
+        workouts.title, 
+        workouts.content,
+        workouts.created_at,
+        users.username as author
+      FROM workouts
+      JOIN users ON workouts.user_id = users.id
+      ORDER BY workouts.created_at DESC
+      LIMIT 5
+    `);
+    
+    // Parse the JSON content and format the response
+    const workouts = result.rows.map(workout => ({
+      ...workout,
+      content: JSON.parse(workout.content),
+      created_at: new Date(workout.created_at).toLocaleDateString()
+    }));
+    
+    res.json({ workouts });
+  } catch (err) {
+    console.error('Error fetching workouts:', err);
+    res.status(500).json({ error: 'Failed to fetch workouts' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Call this when your server starts
