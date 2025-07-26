@@ -41,10 +41,12 @@ export default function AddWorkout() {
       if (!workoutTitle.trim()) {
         throw new Error('Workout title is required');
       }
+      const token = localStorage.getItem('token');
 
       const response = axios.post("/createWorkout", {
         title: workoutTitle, 
-        sets: sets.filter(set => set.title.trim() && set.details.trim())
+        sets: sets.filter(set => set.title.trim() && set.details.trim()),
+        Authorization: `Bearer ${token}`
       });
       setWorkoutTitle('');
       setSets([{ title: '', details: '' }]); // Reset to one empty set

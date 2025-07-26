@@ -24,10 +24,11 @@ const pool = new Pool({
   port: process.env.DB_PORT || 5432,
 });
 
-const user = {
+const user_info = {
   username: "",
   userid: '',
 };
+
 //initialize database
 async function initializeDatabase() {
   try {
@@ -40,6 +41,9 @@ async function initializeDatabase() {
 }
 
 app.post('/Logout', async (req, res) => {
+  user_info.userid = '';
+  user_info.username = '';
+  
   res.status(200).json({ 
     success: true,
     message: 'Logout successful',
@@ -66,7 +70,7 @@ app.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign(
-      { userId: user.id, username: user.username },
+      { userId: userInfo.id, username: userInfo.username },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
@@ -74,9 +78,12 @@ app.post('/login', async (req, res) => {
   res.json({ 
       message: 'Login successful',
       token,
-      user: { id: user.id, username: user.username, name: user.name },
+      user: { id: userInfo.id, username: userInfo.username, name: userInfo.name },
       redirect: "/"
     });
+
+  user_info.userid = userInfo.id;
+  user_info.username = userInfo.username;
 
   console.log(attempt.rows[0]);
   return attempt;
@@ -139,9 +146,13 @@ app.post('/createWorkout', async (req,res) => {
     });
     */
 
+    console.log(user_info.userid);
+
     const work = await pool.query(
-      'INSERT into WORKOUTS (title, content, user_id) VALUES ($1, $2, $3) RETURNING *', [title, str, 1]
+      'INSERT into WORKOUTS (title, content, user_id) VALUES ($1, $2, $3) RETURNING *', [title, str, user_info.userid]
     );
+
+    console.log(work);
 
     res.status(200);
   } catch (err) {

@@ -29,24 +29,23 @@ const ViewWorkout = () => {
   if (!workout) return <div>Workout not found</div>;
 
   return (
-    <div className="workout-detail">
-      <h1 className = "text-6xl">{workout.title}</h1>
-      <p className="author">By {workout.author}</p>
-      
-      {/* <p className="date">Created: {new Date(workout.created_at).toLocaleString()}</p> */}
-      
-
-      <div className="mt-7 workout-content">
+  <div className="workout-detail flex flex-col items-center min-h-screen">
+    <h1 className="text-center text-6xl">{workout.title}</h1>
+    <p className="text-center author">By {workout.author}</p>
+    
+    <div className="show-workout flex justify-center w-1/2 border-x-2 border-blue-200 flex-grow">
+      <div className="pl-6 w-full workout-content">
         <ul className="sets-list">
           {workout.content.map((set, index) => (
-            <li key={index} className="text-2xl set-item">
+            <li key={index} className="mt-4 text-2xl set-item">
               <h3>{set.title}</h3>
-              <p className = "text-xl">Set: {set.details}</p>
+              <p className="text-xl">Set: {set.details}</p>
             </li>
           ))}
         </ul>
       </div>
     </div>
+  </div>
   );
 };
 
