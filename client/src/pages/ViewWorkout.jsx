@@ -40,7 +40,7 @@ const ViewWorkout = () => {
             <li key={index} className="mt-4 text-2xl set-item">
               <h3>{set.title}</h3>
               <p className="text-xl">Set: {set.details}</p>
-            </li>
+            </li> 
           ))}
         </ul>
       </div>

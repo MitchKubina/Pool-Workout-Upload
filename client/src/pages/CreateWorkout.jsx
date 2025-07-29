@@ -46,7 +46,6 @@ export default function AddWorkout() {
       const response = axios.post("/createWorkout", {
         title: workoutTitle, 
         sets: sets.filter(set => set.title.trim() && set.details.trim()),
-        Authorization: `Bearer ${token}`
       });
       setWorkoutTitle('');
       setSets([{ title: '', details: '' }]); // Reset to one empty set

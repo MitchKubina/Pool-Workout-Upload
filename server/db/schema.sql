@@ -24,3 +24,6 @@ CREATE TABLE workouts (
 -- Optional: Insert test data
 INSERT INTO users (username, name, password, affiliation)
 VALUES ('testuser', 'Test User', 'hashed_password', 'Test Affiliation');
+
+INSERT INTO users (username, name, password, affiliation)
+VALUES ('mitch', 'Mitch Kubina', 'lol', 'The Goat');

@@ -217,6 +217,38 @@ app.get('/api/workouts/:id', async (req, res) => {
   }
 });
 
+app.get('/api/workouts/search', async (req, res) => {
+    try {
+        const { title } = req.query;
+        
+        if (!title) {
+            return res.status(400).json({ error: 'Search title is required' });
+        }
+
+        console.log("here");
+
+        const result = await pool.query(
+            `SELECT 
+                workouts.id,
+                workouts.title,
+                workouts.created_at,
+                users.username as author
+             FROM workouts
+             JOIN users ON workouts.user_id = users.id
+             WHERE workouts.title ILIKE $1
+             ORDER BY workouts.created_at DESC`,
+            [`%${title}%`] // ILIKE for case-insensitive search
+        );
+
+        console.log("here?");
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Search error:', err);
+        res.status(500).json({ error: 'Failed to search workouts' });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Call this when your server starts
