@@ -10,6 +10,8 @@ export default function Register() {
         affiliation: ''
     });
 
+    const [error, setError] = useState(false)
+
     const handleChange = (e) => {
         setFormData({ 
             ...formData, 
@@ -19,6 +21,7 @@ export default function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(false);
         try {
             const response = await axios.post('/register', formData)
                 .then(response => {
@@ -32,6 +35,7 @@ export default function Register() {
             console.log('User registered:', response.data);
             setFormData({ name: '', username: '', password: '', password_confirm: '', affiliation: ''});
         } catch (err) {
+            setError(true);
             console.error('Error registering user:', err.response?.data || err.message);
         }
     };
@@ -80,6 +84,7 @@ export default function Register() {
                 <div className = "p-1 justify-start">
                     <p className = "text-sm">Already have an account? Login <a className = "text-blue-300" href = "/Login">Here</a></p>
                 </div>
+                {error === true ? (<div className = "text-md text-red-500">Username already exists</div>) : (<div></div>)}
             </div>
         </div>
     );

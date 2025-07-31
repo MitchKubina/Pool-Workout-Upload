@@ -63,7 +63,9 @@ app.post('/login', async (req, res) => {
   }
 
   let userInfo = attempt.rows[0];
-  const passwordMatch = bcrypt.compare(password, userInfo.password)
+  const passwordMatch = await bcrypt.compare(password, userInfo.password)
+
+  console.log(passwordMatch);
 
   if (!passwordMatch) {
       return res.status(401).json({ error: 'Invalid credentials' });

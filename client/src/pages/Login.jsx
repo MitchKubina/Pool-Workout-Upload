@@ -1,11 +1,16 @@
 import {useState} from "react"
 import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+    const navigate = useNavigate();
+   
     const [formData, setFormData] = useState({
         username: '',
         password: ''
     });
+
+    const [error, setError] = useState(false);
 
     const handleChange = (e) => {
         setFormData({ 
@@ -16,15 +21,22 @@ export default function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(false);
         try {
             const response = await axios.post('/login', formData)
             .then(response => {
-                    if (response.data.redirect) {
-                    window.location.href = response.data.redirect;
-                    }
+
+                    const token = response.data.token;
+                    localStorage.setItem('token', token);
+
+                    // if (response.data.redirect) {
+                    //     window.location.href = response.data.redirect;
+                    // }
+
+                    navigate(response.data.redirect);
                 })
             .catch(err => {
-                console.log(err);
+                setError(true);
             });
             console.log('User logged in:', response.data);
             setFormData({ username: '', password: ''});
@@ -61,6 +73,10 @@ export default function Login() {
                 <div className = "p-1 justify-start">
                     <p className = "text-sm">Don't have an account? Register <a className = "text-blue-300" href = "/Register">Here</a></p>
                 </div>
+                {error === true ? (
+                    <div className = "text-md text-red-500">Could not find username/password</div>
+                ) : (<div>
+                    </div>)}
             </div>
         </div>
     );

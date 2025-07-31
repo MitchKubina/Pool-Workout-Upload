@@ -6,6 +6,7 @@ import CreateWorkout from './pages/CreateWorkout'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import ViewWorkout from './pages/ViewWorkout'
+import ProtectedRoute from './components/ProtectedRoute'
 
 
 export default function App() {
@@ -15,8 +16,12 @@ export default function App() {
       <div className = "p-4">
         <Routes>
           <Route path = "/" element = {<Home />}/>
-          <Route path = "/Search" element = {<Search />}/>  
-          <Route path = "/CreateWorkout" element = {<CreateWorkout />}/>
+          <Route path = "/Search" element = {<Search />}/>
+          <Route path="/CreateWorkout" element={
+            <ProtectedRoute>
+              <CreateWorkout />
+            </ProtectedRoute>
+          } />
           <Route path = "/Register" element = {<Register />}/>
           <Route path = "/Login" element = {<Login />}/>
           <Route path="/view-workout/:id" element={<ViewWorkout />} />
