@@ -146,13 +146,14 @@ app.post('/createWorkout', async (req,res) => {
     });
     */
 
-    console.log(user_info.userid);
+    //console.log(user_info.userid);
+
 
     const work = await pool.query(
       'INSERT into WORKOUTS (title, content, user_id) VALUES ($1, $2, $3) RETURNING *', [title, str, user_info.userid]
     );
 
-    console.log(work);
+    //console.log(work);
 
     res.status(200);
   } catch (err) {
@@ -189,38 +190,12 @@ app.get('/api/workouts/recent', async (req, res) => {
   }
 });
 
-app.get('/api/workouts/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await pool.query(`
-      SELECT 
-        workouts.*,
-        users.username as author
-      FROM workouts
-      JOIN users ON workouts.user_id = users.id
-      WHERE workouts.id = $1
-    `, [id]);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Workout not found' });
-    }
-
-    const workout = {
-      ...result.rows[0],
-      content: JSON.parse(result.rows[0].content)
-    };
-
-    res.json(workout);
-  } catch (err) {
-    console.error('Error fetching workout:', err);
-    res.status(500).json({ error: 'Failed to fetch workout' });
-  }
-});
-
 app.get('/api/workouts/search', async (req, res) => {
     try {
         const { title } = req.query;
-        
+        //console.log("Search Route triggered");
+        //console.log(title);
+
         if (!title) {
             return res.status(400).json({ error: 'Search title is required' });
         }
@@ -247,6 +222,34 @@ app.get('/api/workouts/search', async (req, res) => {
         console.error('Search error:', err);
         res.status(500).json({ error: 'Failed to search workouts' });
     }
+});
+
+app.get('/api/workouts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(`
+      SELECT 
+        workouts.*,
+        users.username as author
+      FROM workouts
+      JOIN users ON workouts.user_id = users.id
+      WHERE workouts.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Workout not found' });
+    }
+
+    const workout = {
+      ...result.rows[0],
+      content: JSON.parse(result.rows[0].content)
+    };
+
+    res.json(workout);
+  } catch (err) {
+    console.error('Error fetching workout:', err);
+    res.status(500).json({ error: 'Failed to fetch workout' });
+  }
 });
 
 const PORT = process.env.PORT || 5000;

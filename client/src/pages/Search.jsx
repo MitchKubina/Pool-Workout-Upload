@@ -70,11 +70,9 @@ export default function Search() {
                             </Link>
                         ))}
                     </div>
-                ) : isSubmitting ? (
-                    <p className="text-center py-4">Searching workouts...</p>
-                ) : search && !isSubmitting ? (
+                ) : (
                     <p className="text-center py-4">No workouts found matching "{search}"</p>
-                ) : null}
+                )}
             </div>
         </div>
     );

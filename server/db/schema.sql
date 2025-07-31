@@ -27,3 +27,5 @@ VALUES ('testuser', 'Test User', 'hashed_password', 'Test Affiliation');
 
 INSERT INTO users (username, name, password, affiliation)
 VALUES ('mitch', 'Mitch Kubina', 'lol', 'The Goat');
+
+INSERT INTO workouts (title, content, user_id) VALUES ("Aerobic", '[{"title":"123","details":"123"]}', 0);
