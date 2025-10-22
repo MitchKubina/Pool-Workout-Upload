@@ -22,11 +22,7 @@ app.use(express.json()); // for parsing application/json
 //console.log('DB_PASSWORD:', process.env.DB_PASS, 'Type:', typeof process.env.DB_PASSWORD);
 
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASS,
-  port: process.env.DB_PORT || 5432,
+  connectionString: process.env.DATABASE_URL,
 });
 
 const user_info = {

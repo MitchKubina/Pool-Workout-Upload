@@ -5,6 +5,4 @@ const instance = axios.create({
   withCredentials: true, // Important for cookies/sessions
 });
 
-console.log(process.env.REACT_APP_API_URL);
-
 export default instance;
