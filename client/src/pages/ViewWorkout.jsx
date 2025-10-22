@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ViewWorkout = () => {
   const { id } = useParams();
   const [workout, setWorkout] = useState(null);
@@ -10,7 +12,7 @@ const ViewWorkout = () => {
   useEffect(() => {
     const fetchWorkout = async () => {
       try {
-        const response = await fetch(`/api/workouts/${id}`);
+        const response = await fetch(`${API_URL}/api/workouts/${id}`);
         if (!response.ok) throw new Error('Workout not found');
         const data = await response.json();
         setWorkout(data);

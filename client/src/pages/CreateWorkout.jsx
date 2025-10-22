@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios'
+import axios from "../api/axios"
 
 export default function AddWorkout() {
   // State to track all sets (each set has title and details)

@@ -1,5 +1,5 @@
 import {useState} from "react"
-import axios from "axios"
+import axios from "../api/axios"
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -22,11 +22,12 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(false);
+        console.log(process.env.REACT_APP_API_URL);
         try {
             const response = await axios.post('/register', formData)
                 .then(response => {
                     if (response.data.redirect) {
-                    window.location.href = response.data.redirect;
+                        window.location.href = response.data.redirect;
                     }
                 })
                 .catch(error => {

@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const RecentWorkouts = () => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +12,7 @@ const RecentWorkouts = () => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const response = await fetch('/api/workouts/recent');
+        const response = await fetch(`${API_URL}/api/workouts/recent`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

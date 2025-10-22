@@ -10,7 +10,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true,
+}));
+
 app.use(express.json()); // for parsing application/json
 //const prisma = new PrismaClient();
 
@@ -141,15 +146,6 @@ app.post('/createWorkout', async (req,res) => {
   try {
     console.log(JSON.stringify(sets));
     const str = JSON.stringify(sets);
-
-    /*
-    const workout = await prisma.workout.create({
-      data: {title: title, content: str, userId: 1},
-    });
-    */
-
-    //console.log(user_info.userid);
-
 
     const work = await pool.query(
       'INSERT into WORKOUTS (title, content, user_id) VALUES ($1, $2, $3) RETURNING *', [title, str, user_info.userid]
