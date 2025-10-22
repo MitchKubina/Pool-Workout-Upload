@@ -34,6 +34,7 @@ app.use(express.json()); // for parsing application/json
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
 const user_info = {
