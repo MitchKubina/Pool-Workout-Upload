@@ -11,8 +11,19 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.CLIENT_URL, // Will set this in Render
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy violation'), false);
+    }
+  },
   credentials: true,
 }));
 
@@ -245,6 +256,15 @@ app.get('/api/workouts/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch workout' });
   }
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  // Catch-all handler for React Router
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
