@@ -261,11 +261,6 @@ app.get('/api/workouts/:id', async (req, res) => {
 if (process.env.NODE_ENV === 'production') {
   // Serve static files
   app.use(express.static(path.join(__dirname, 'build')));
-  
-  // Catch-all: send React app for any route that wasn't matched above
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
 }
 
 const PORT = process.env.PORT || 5000;
